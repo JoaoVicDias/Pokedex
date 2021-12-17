@@ -2,8 +2,9 @@ import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle `
     #root, html, body {
-        height: 100vh;
+        min-height: 100vh;
         width: 100vw;
+        overflow-x: hidden;
     } 
 
     * {
@@ -21,5 +22,9 @@ export default createGlobalStyle `
 
     button {
         cursor: pointer;
+    }
+
+    ul {
+        list-style: none;
     }
 `
