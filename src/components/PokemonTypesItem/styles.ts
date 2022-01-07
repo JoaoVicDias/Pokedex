@@ -9,10 +9,26 @@ export const Container = styled.div <IContainer>`
     padding: 8px;
     display: flex;
     border-radius: 3px;
+    display: flex;
+    align-items: center;
+
+    @media(max-width: 380px) {
+        padding: 5px;
+    }
 
     > svg {
         width: 18px;
         height: 18px;
+
+        @media(max-width: 1023px) {
+            width: 12px;
+            height: 12px;
+        }
+
+        @media(max-width: 380px) {
+            width: 10px;
+            height: 10px;
+        }
     }
 
     > span {
@@ -21,5 +37,14 @@ export const Container = styled.div <IContainer>`
         color: #fff;
         font-size: 1.2rem;
         line-height: 14px;
+
+        @media(max-width: 1023px) {
+            font-size: 1rem;
+        }
+
+        @media(max-width: 380px) {
+            font-size: 0.9rem;
+            line-height: initial;
+        }
     } 
 `

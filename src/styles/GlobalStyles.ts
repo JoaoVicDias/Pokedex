@@ -3,8 +3,6 @@ import { createGlobalStyle } from 'styled-components'
 export default createGlobalStyle `
     #root, html, body {
         min-height: 100vh;
-        width: 100vw;
-        overflow-x: hidden;
     } 
 
     * {

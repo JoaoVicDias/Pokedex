@@ -15,9 +15,9 @@ const ListPokemons: React.FC<IListPokemonsProps> = ({ pokemons }) => {
 
     return (
         <Container>
-            {
+            {  
                 pokemons.map((pokemon) => (
-                    <PokemonCard key={pokemon.name} pokemonUrl={pokemon.url}/>
+                    <PokemonCard key={pokemon.name} pokemonUrl={pokemon.url} />
                 ))
             }
         </Container>

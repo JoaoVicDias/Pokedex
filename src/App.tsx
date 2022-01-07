@@ -1,13 +1,8 @@
 import React from 'react';
 
-import RoutesComponent from './RoutesComponent';
+import Routes from './Routes';
 
-function App() {
-  return (
-    <div>
-      <RoutesComponent />
-    </div>
-  );
-}
+const App: React.FC = () => <Routes />
+
 
 export default App;

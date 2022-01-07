@@ -23,10 +23,11 @@ import { Container } from './styles'
 
 interface IPokemonTypesItemProps {
     typeName: string;
+    justIcon?: boolean;
 }
 
 
-const PokemonTypesItem: React.FC<IPokemonTypesItemProps> = ({ typeName }) => {
+const PokemonTypesItem: React.FC<IPokemonTypesItemProps> = ({ typeName, justIcon }) => {
 
     const selectTypesInformations = useMemo(() => {
         switch (typeName) {
@@ -132,9 +133,13 @@ const PokemonTypesItem: React.FC<IPokemonTypesItemProps> = ({ typeName }) => {
     return (
         <Container color={selectTypesInformations.color}>
             <selectTypesInformations.image />
-            <span>
-                {typeName}
-            </span>
+            {
+                !justIcon &&
+                <span>
+                    {typeName}
+                </span>
+            }
+
         </Container>
     )
 }

@@ -6,6 +6,7 @@ import HomeHeader from '../../components/HomeHeader'
 import Filter from '../../components/Filter'
 import ListPokemons from '../../components/ListPokemons'
 import Spinner from '../../components/Spinner';
+import NotFoundMessage from '../../components/NotFoundMessage';
 
 import { Container } from './styles'
 
@@ -24,15 +25,19 @@ interface IFilterState {
 }
 
 const Home: React.FC = () => {
+
+    let filterTimeOut: NodeJS.Timeout
     const perPage = 15
     const [paginate, setPaginate] = useState<IPaginateState>({ start: 0, end: perPage - 1 })
     const [filter, setFilter] = useState<IFilterState | any>({ name: '' })
     const [totalItems, setTotalItems] = useState<number>(0)
+    const [loading, setLoading] = useState<boolean>(true)
+    const [isEmpty, setIsEmpty] = useState<boolean>(false)
     const [data, setData] = useState<IPokemons[]>([])
     const [filteredData, setFilteredData] = useState<IPokemons[]>([])
     const [pokemons, setPokemons] = useState<IPokemons[]>([])
 
-    const checkHasMoreItems = useMemo(() => filteredData.length > 0 ? filteredData.length >= paginate.end : totalItems >= paginate.end, [filteredData.length, paginate.end, totalItems])
+    const checkHasMoreItems = useMemo(() => filteredData.length >= paginate.end, [filteredData.length, paginate.end])
 
     const filterConfigMemo = useMemo(() => [
         {
@@ -52,29 +57,25 @@ const Home: React.FC = () => {
     }, [])
 
     const onPaginateHandle = useCallback(() => {
-        setPaginate(prevState => ({ start: prevState.start + perPage, end: prevState.end + perPage }))
+        setPaginate(prevState => ({ start: prevState.start, end: prevState.end + perPage }))
     }, [])
 
     const onNextPageHandler = useCallback(() => {
-        setPokemons(PrevState => {
+        setPokemons(() => {
             let newData
-            if (filteredData.length > 0) {
-                newData = filteredData.filter((item, index) => index >= paginate.start && index <= paginate.end)
-            } else {
-                newData = data.filter((item, index) => index >= paginate.start && index <= paginate.end)
-            }
-
-            return PrevState.concat(newData)
+            newData = filteredData.filter((item, index) => index >= paginate.start && index <= paginate.end)
+            return newData
         })
 
-    }, [data, filteredData, paginate.end, paginate.start])
+    }, [filteredData, paginate.end, paginate.start])
 
     const onGetPokemonsHandler = useCallback(async () => {
         try {
             const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${totalItems}`)
             setData(res.data.results)
-
+            setLoading(false)
         } catch (e) {
+            setLoading(false)
             console.log(e)
         }
     }, [totalItems])
@@ -84,13 +85,31 @@ const Home: React.FC = () => {
     }, [])
 
     const onFilterHandler = useCallback(() => {
-        setFilteredData(
-            Object.entries(filter).reduce((item, [key, value]) => {
-                return item.filter((pokemon: any) => pokemon[key].includes(value) && value !== '')
+        clearTimeout(filterTimeOut)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        filterTimeOut = setTimeout(() => {
+            const newData = Object.entries(filter).reduce((item, [key, value]) => {
+                return item.filter((pokemon: any) => pokemon[key].includes(value))
             }, data)
-        )
-        
+
+            if (!loading && newData.length === 0) {
+                setIsEmpty(true)
+            } else {
+                setIsEmpty(false)
+            }
+
+            setFilteredData(newData)
+            setPokemons([])
+            setPaginate({ start: 0, end: perPage - 1 })
+
+        }, 200)
+
     }, [filter, data])
+
+    useEffect(() => {
+        onFilterHandler()
+    }, [onFilterHandler])
 
     useEffect(() => {
         onGetCountPokemonsHandler()
@@ -106,14 +125,13 @@ const Home: React.FC = () => {
         onNextPageHandler()
     }, [onNextPageHandler])
 
-    useEffect(() => {
-        onFilterHandler()
-    }, [onFilterHandler])
-
     return (
         <Container>
             <HomeHeader />
             <Filter filterConfig={filterConfigMemo} onActionFilter={onSetFilterHandler} />
+            {isEmpty && <NotFoundMessage />}
+
+            {loading && <Spinner />}
             <InfiniteScroll
                 dataLength={pokemons.length}
                 next={onPaginateHandle}
