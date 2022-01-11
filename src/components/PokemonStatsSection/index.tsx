@@ -20,6 +20,7 @@ const PokemonStatsSection: React.FC<IPokemonStatsSectionProps> = ({ color, infor
         {
             informations.map(information => (
                 <PokemonStatsInformationItem
+                    key={information.stat.name}
                     amount={information.base_stat}
                     label={information.stat.name}
                     color={color}

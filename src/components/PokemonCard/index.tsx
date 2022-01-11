@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import PokemonTypesItem from "../PokemonTypesItem";
 
@@ -29,6 +29,8 @@ interface IPokemonInformations {
 
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemonUrl }) => {
 
+    const navigate = useNavigate()
+
     const isMounted = useRef(false)
 
     const [pokemonInformations, setPokemonInformations] = useState<IPokemonInformations>({
@@ -55,9 +57,10 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemonUrl }) => {
                 })
             }
         } catch (e) {
+            navigate('/something-wrong')
             console.log(e)
         }
-    }, [pokemonUrl, isMounted])
+    }, [pokemonUrl, isMounted, navigate])
 
     useEffect(() => {
         isMounted.current = true

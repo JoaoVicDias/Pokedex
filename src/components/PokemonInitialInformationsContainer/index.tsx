@@ -25,9 +25,10 @@ const PokemonInitialInformationsContainer: React.FC<IPokemonInitialInformationsP
     name,
     types,
     color,
-    imgUrl }) => {
+    imgUrl
+}) => {
 
-        const navigate = useNavigate()
+    const navigate = useNavigate()
 
     return (
         <Container color={color}>

@@ -13,6 +13,7 @@ export const Container = styled.div <IContainer>`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    flex: 1;
 
     .svg__left--arrow {
         position: absolute;

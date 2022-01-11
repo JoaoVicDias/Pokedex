@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 import HomeHeader from '../../components/HomeHeader'
 import Filter from '../../components/Filter'
@@ -37,6 +38,8 @@ const Home: React.FC = () => {
     const [filteredData, setFilteredData] = useState<IPokemons[]>([])
     const [pokemons, setPokemons] = useState<IPokemons[]>([])
 
+    const navigate = useNavigate()
+
     const checkHasMoreItems = useMemo(() => filteredData.length >= paginate.end, [filteredData.length, paginate.end])
 
     const filterConfigMemo = useMemo(() => [
@@ -53,8 +56,9 @@ const Home: React.FC = () => {
             setTotalItems(res.data.count)
         } catch (error) {
             console.log(error)
+            navigate('/something-wrong')
         }
-    }, [])
+    }, [navigate])
 
     const onPaginateHandle = useCallback(() => {
         setPaginate(prevState => ({ start: prevState.start, end: prevState.end + perPage }))
@@ -76,9 +80,10 @@ const Home: React.FC = () => {
             setLoading(false)
         } catch (e) {
             setLoading(false)
+            navigate('/something-wrong')
             console.log(e)
         }
-    }, [totalItems])
+    }, [totalItems, navigate])
 
     const onSetFilterHandler = useCallback((event, filterName: string) => {
         setFilter((prevState: any) => ({ ...prevState, [filterName]: event.target.value }))

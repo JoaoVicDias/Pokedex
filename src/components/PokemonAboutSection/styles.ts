@@ -6,16 +6,14 @@ interface IAboutSectionItemsContainer {
 
 export const Container = styled.div `
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    padding: 20px;
+    padding: 0 90px;
 
     > p {
         text-align: center;
         color: rgb(116, 116, 118);
         line-height: 23px;
         font-size: 1.4rem;
+        margin-bottom: 10px;
     }
    
 `

@@ -9,7 +9,7 @@ interface INavigationSectionContainer {
 }
 
 export const Container = styled.div <IContainer>`
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     background-color: ${props => props.color};
@@ -28,9 +28,8 @@ export const NavigationSectionContainer = styled.ul<INavigationSectionContainer>
 export const PokemonHardInformationsContainer = styled.div `
     display: flex;
     width: 100%;
-    flex: 1;
     background-color: #fff;
-    padding: 20px;
+    padding:20px;
     border-radius: 16px 16px 0 0;
 `
 
