@@ -8,11 +8,11 @@ import PokemonAboutSection from '../../components/PokemonAboutSection'
 import PokemonTypesItem from '../../components/PokemonTypesItem'
 import PokemonStatsSection from '../../components/PokemonStatsSection'
 import PokemonEvolutionSection from '../../components/PokemonEvolutionSection'
+import Spinner from '../../components/Spinner'
 
 import PokemonTypesColors from '../../Utils/PokemonTypesColors'
 
 import { Container, NavigationSectionContainer, PokemonHardInformationsContainer, WeaknessesContainer } from './styles'
-import Spinner from '../../components/Spinner'
 
 interface IPokemonType {
     type: {

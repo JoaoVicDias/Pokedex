@@ -23,6 +23,10 @@ export const NavigationSectionContainer = styled.ul<INavigationSectionContainer>
     align-items: center;
     margin: 0 auto;
     background-color: ${props => props.color};
+    
+    @media(max-width:767px) {
+        padding: 5px 20px;
+    }
 `
 
 export const PokemonHardInformationsContainer = styled.div `

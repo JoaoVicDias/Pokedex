@@ -13,6 +13,11 @@ export const Container = styled.div`
     text-align: center;
     gap: 40px;
 
+    @media(max-width:767px) {
+        padding: 0px 10px;
+        gap: 16px;
+    }
+
     > strong {
         width: 150px;
         font-weight: 500;
@@ -20,12 +25,23 @@ export const Container = styled.div`
         line-height: 22px;
         color: rgb(23, 23, 27);
         text-transform: capitalize;
+
+        @media(max-width:767px) {
+            width: 80px;
+            font-size: 1rem;
+            line-height: initial;
+        }
     }
 
     > p {
         font-size: 1.375rem;
         line-height: 25px;
         color: rgb(116, 116, 118);
+
+        @media(max-width:767px) {
+            font-size: 1.1rem;
+            line-height: initial;
+        }
     }
 `
 

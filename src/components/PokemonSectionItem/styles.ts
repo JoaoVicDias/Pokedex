@@ -11,4 +11,8 @@ export const Container = styled.li <IContainer> `
     padding: 5px;
     text-transform: capitalize;
     border-bottom: ${props => props.isActive ? '2px solid #fff' : 'none'};
+
+    @media(max-width:767px) {
+        font-size: 1.2rem;
+    }
 `

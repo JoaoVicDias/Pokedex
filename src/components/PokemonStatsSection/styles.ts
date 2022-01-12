@@ -6,4 +6,8 @@ export const Container = styled.div `
     flex-direction: column;
     justify-content: center;
     gap: 15px;
+
+    @media(max-width:767px) {
+        gap: 8px;
+    }
 `

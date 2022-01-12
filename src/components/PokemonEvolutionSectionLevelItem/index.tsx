@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
-import { FaLongArrowAltRight } from 'react-icons/fa'
+import { FaLongArrowAltRight, FaLongArrowAltDown } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import { ItemEvolutionContainer, LevelContainer } from './styles'
@@ -33,7 +33,8 @@ const PokemonEvolutionSectionLevelItem: React.FC<IPokemonEvolutionSectionLevelIt
         if (level)
             return (
                 <LevelContainer>
-                    <FaLongArrowAltRight />
+                    <FaLongArrowAltRight className='svg__desktop' />
+                    <FaLongArrowAltDown className='svg__mobile'/>
                     <span>
                         (Level {level})
                     </span>
@@ -50,7 +51,8 @@ const PokemonEvolutionSectionLevelItem: React.FC<IPokemonEvolutionSectionLevelIt
 
         return (
             <LevelContainer>
-                <FaLongArrowAltRight />
+                <FaLongArrowAltDown className='svg__mobile'/>
+                <FaLongArrowAltRight className='svg__desktop' />
             </LevelContainer>
         )
 
