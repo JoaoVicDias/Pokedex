@@ -86,7 +86,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemonUrl }) => {
                 <RightSideContainer>
                     <PokeballSvg className="svg__pokeball" />
                 </RightSideContainer>
-                <PokemonImg src={pokemonInformations.defaultImg} alt={pokemonInformations.name} loading="lazy" />
+                <PokemonImg className="img__pokemon" src={pokemonInformations.defaultImg} alt={pokemonInformations.name} loading="lazy" />
             </Link>
         </Container>
     )

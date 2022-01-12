@@ -8,6 +8,19 @@ export const Container = styled.li <IContainer>`
     background-color: ${props => props.color};
     box-shadow: rgb(0 0 0 / 30%) 1px 3px 12px 0px;
     border-radius: 6px;
+    /* transition: all 0.3s ease-in-out; */
+    animation-name: InitAnimation;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: unset;
+
+    :active,
+    :hover {
+        .img__pokemon {
+            transform: scale(1.09);
+        }
+    }
+
 
     > a {
         padding: 20px;
@@ -20,6 +33,19 @@ export const Container = styled.li <IContainer>`
         @media(max-width: 380px) {
             padding: 10px;
         }
+    }
+
+    @keyframes InitAnimation {
+        from {
+            transform: translateY(-10%);
+            opacity: 0;
+        }   
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+            
     }
 `
 

@@ -53,9 +53,24 @@ export const PokemonInformationsContainer = styled.div `
     display: flex;
     align-items: center;
     justify-content: center;
+    animation-name: initAnimation;
+    animation-duration: 0.5s;
+    animation-iteration-count: unset;
+    
 
     @media(max-width:767px) {
         flex-direction: column;
+    }
+
+    @keyframes initAnimation {
+        from {
+            transform: translateX(-200%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
 `
 export const PokemonInformationsImg = styled.div `

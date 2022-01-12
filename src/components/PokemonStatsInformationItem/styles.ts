@@ -45,13 +45,23 @@ export const Container = styled.div`
     }
 `
 
-export const StatsBar = styled.div <IStatsBar>`
+export const StatsBarContainer = styled.div`
     flex: 1;
+`
 
-    > div {
-        background-color: ${props => props.color};
-        height: 4px;
-        width: ${props => props.amount > 100 ? '100' : props.amount}%;
+export const StatsBar = styled.div <IStatsBar>`
+    background-color: ${props => props.color};
+    height: 4px;    
+    width: ${props => props.amount > 100 ? '100' : props.amount}%;
+    animation: statsBarAnimation 0.5s ease-in-out;
+    
+    @keyframes statsBarAnimation {
+        0% {
+            width: 0px;
+        }
     }
+    
+
+
 
 `

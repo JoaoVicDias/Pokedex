@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Container, StatsBar } from './styles'
+import { Container, StatsBarContainer, StatsBar } from './styles'
 
 interface IPokemonStatsInformationItemProps {
     label: string;
@@ -12,9 +12,10 @@ const PokemonStatsInformationItem: React.FC<IPokemonStatsInformationItemProps> =
     <Container>
         <strong> {label} </strong>
         <p> {amount} </p>
-        <StatsBar amount={amount} color={color}>
-            <div></div>
-        </StatsBar>
+        <StatsBarContainer>
+            <StatsBar amount={amount} color={color}>
+            </StatsBar>
+        </StatsBarContainer>
         <p>100</p>
     </Container>
 )
