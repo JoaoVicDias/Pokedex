@@ -103,7 +103,6 @@ const Pokemon: React.FC = () => {
         stats: false,
         evolution: false
     })
-
     const [loading, setLoading] = useState<boolean>(false)
 
     const getColorByType = useMemo(() => {
@@ -111,7 +110,7 @@ const Pokemon: React.FC = () => {
     }, [pokemon.types])
 
     const onChangeSectionHandler = useCallback((section: string) => {
-        setPageSection((prevState: any) => {
+        setPageSection((prevState: iPageSectionState) => {
             let newState = { ...prevState }
 
             for (let key in prevState) {
@@ -210,7 +209,7 @@ const Pokemon: React.FC = () => {
         evolutions.push(currentEvolutionInformations)
 
         if (evolutionObj.evolves_to.length > 0) {
-            evolutionObj.evolves_to.forEach((evolution, idx) => {
+            evolutionObj.evolves_to.forEach((_, idx) => {
                 evolutions = evolutions.concat(onGetEvolutionByObj(evolutionObj.evolves_to[idx]))
             })
 

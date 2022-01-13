@@ -28,7 +28,8 @@ interface IFilterState {
 const Home: React.FC = () => {
 
     let filterTimeOut: NodeJS.Timeout
-    const perPage = 15
+    const perPage: number = 15
+
     const [paginate, setPaginate] = useState<IPaginateState>({ start: 0, end: perPage - 1 })
     const [filter, setFilter] = useState<IFilterState | any>({ name: '' })
     const [totalItems, setTotalItems] = useState<number>(0)
@@ -50,8 +51,27 @@ const Home: React.FC = () => {
         }
     ], [])
 
-    const onGetCountPokemonsHandler = useCallback(async () => {
+    const onNextPageHandler = useCallback(() => (
+        setPaginate(prevState => ({ ...prevState, end: prevState.end + perPage }))
+    ), [])
+
+    const onAddItemsToNextPageHandler = useCallback(() => {
+        let pokemonsToShow: IPokemons[] = []
+
+        pokemonsToShow = filteredData.filter((_, index) => index >= paginate.start && index <= paginate.end)
+
+        return setPokemons(pokemonsToShow)
+
+    }, [filteredData, paginate])
+
+    const onSetFilterHandler = useCallback((event, filterName: string) => {
+        setFilter((prevState: IFilterState) => ({ ...prevState, [filterName]: event.target.value }))
+    }, [])
+
+    const onFetchCountPokemonsHandler = useCallback(async () => {
         try {
+            setLoading(true)
+
             const res = await axios.get(`https://pokeapi.co/api/v2/pokemon`)
             setTotalItems(res.data.count)
         } catch (error) {
@@ -60,23 +80,13 @@ const Home: React.FC = () => {
         }
     }, [navigate])
 
-    const onPaginateHandle = useCallback(() => {
-        setPaginate(prevState => ({ start: prevState.start, end: prevState.end + perPage }))
-    }, [])
-
-    const onNextPageHandler = useCallback(() => {
-        setPokemons(() => {
-            let newData
-            newData = filteredData.filter((item, index) => index >= paginate.start && index <= paginate.end)
-            return newData
-        })
-
-    }, [filteredData, paginate.end, paginate.start])
-
-    const onGetPokemonsHandler = useCallback(async () => {
+    const onFetchPokemonsHandler = useCallback(async () => {
         try {
             const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${totalItems}`)
             setData(res.data.results)
+
+            if (res.data.results.length === 0) setIsEmpty(true)
+
             setLoading(false)
         } catch (e) {
             setLoading(false)
@@ -85,67 +95,62 @@ const Home: React.FC = () => {
         }
     }, [totalItems, navigate])
 
-    const onSetFilterHandler = useCallback((event, filterName: string) => {
-        setFilter((prevState: any) => ({ ...prevState, [filterName]: event.target.value }))
-    }, [])
-
     const onFilterHandler = useCallback(() => {
         clearTimeout(filterTimeOut)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
         filterTimeOut = setTimeout(() => {
-            const newData = Object.entries(filter).reduce((item, [key, value]) => {
-                return item.filter((pokemon: any) => pokemon[key].includes(value))
+            const filteredPokemons = Object.entries(filter).reduce((item, [key, value]) => {
+                return item.filter((pokemon: IPokemons | any) => pokemon[key].includes(value))
             }, data)
 
-            if (!loading && newData.length === 0) {
-                setIsEmpty(true)
-            } else {
-                setIsEmpty(false)
-            }
-
-            setFilteredData(newData)
+            setIsEmpty(!loading && filteredPokemons.length === 0)
+            setFilteredData(filteredPokemons)
             setPokemons([])
             setPaginate({ start: 0, end: perPage - 1 })
 
-        }, 200)
+        }, 100)
 
     }, [filter, data])
+
+    useEffect(() => {
+        onFetchCountPokemonsHandler()
+    }, [onFetchCountPokemonsHandler])
+
+    useEffect(() => {
+        if (totalItems > 0) {
+            onFetchPokemonsHandler()
+        }
+    }, [onFetchPokemonsHandler, totalItems])
 
     useEffect(() => {
         onFilterHandler()
     }, [onFilterHandler])
 
     useEffect(() => {
-        onGetCountPokemonsHandler()
-    }, [onGetCountPokemonsHandler])
-
-    useEffect(() => {
-        if (totalItems > 0) {
-            onGetPokemonsHandler()
-        }
-    }, [onGetPokemonsHandler, totalItems])
-
-    useEffect(() => {
-        onNextPageHandler()
-    }, [onNextPageHandler])
+        onAddItemsToNextPageHandler()
+    }, [onAddItemsToNextPageHandler])
 
     return (
         <Container>
             <HomeHeader />
             <Filter filterConfig={filterConfigMemo} onActionFilter={onSetFilterHandler} />
-            {isEmpty && <NotFoundMessage />}
-
             {loading && <Spinner />}
-            <InfiniteScroll
-                dataLength={pokemons.length}
-                next={onPaginateHandle}
-                hasMore={checkHasMoreItems}
-                loader={<Spinner />}
-                style={{ overflow: 'none' }}
-            >
-                <ListPokemons pokemons={pokemons} />
-            </InfiniteScroll>
+            {isEmpty && !loading ? <NotFoundMessage />
+                : (
+                    <InfiniteScroll
+                        dataLength={pokemons.length}
+                        next={onNextPageHandler}
+                        hasMore={checkHasMoreItems}
+                        loader={<Spinner />}
+                        style={{ overflow: 'none' }}
+                    >
+                        <ListPokemons pokemons={pokemons} />
+                    </InfiniteScroll>
+                )
+            }
+
+
         </Container>
     )
 }

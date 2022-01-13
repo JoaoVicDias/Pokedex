@@ -8,7 +8,15 @@ import { ReactComponent as PokeballSvg } from '../../assets/pokeball.svg'
 
 import PokemonTypesColors from "../../Utils/PokemonTypesColors";
 
-import { Container, LeftSideContainer, IdPokemon, NamePokemon, TypesContainer, RightSideContainer, PokemonImg } from './styles'
+import {
+    Container,
+    LeftSideContainer,
+    IdPokemon,
+    NamePokemon,
+    TypesContainer,
+    RightSideContainer,
+    PokemonImg
+} from './styles'
 
 interface PokemonCardProps {
     pokemonUrl: string;
@@ -39,24 +47,28 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemonUrl }) => {
         types: [],
         defaultImg: ''
     })
+    const [loading, setLoading] = useState<boolean>(false)
 
-    const checkWichColorHandler = useMemo(() => (
+    const colorShouldUser = useMemo(() => (
         PokemonTypesColors.find(type => type.type === pokemonInformations.types[0]?.type.name)?.color
     )
         , [pokemonInformations])
 
-    const getPokemonInformationsHandler = useCallback(async () => {
+    const onFetchPokemonInformationsHandler = useCallback(async () => {
         try {
+            setLoading(true)
             const res = await axios.get(pokemonUrl)
-            if (isMounted.current) {
-                setPokemonInformations({
-                    id: res.data.id,
-                    name: res.data.name,
-                    types: res.data.types,
-                    defaultImg: res.data.sprites?.other['official-artwork'].front_default
-                })
-            }
+            if (!isMounted.current) return
+            setPokemonInformations({
+                id: res.data.id,
+                name: res.data.name,
+                types: res.data.types,
+                defaultImg: res.data.sprites?.other['official-artwork'].front_default
+            })
+            setLoading(false)
+
         } catch (e) {
+            setLoading(false)
             navigate('/something-wrong')
             console.log(e)
         }
@@ -64,13 +76,13 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemonUrl }) => {
 
     useEffect(() => {
         isMounted.current = true
-        getPokemonInformationsHandler()
+        onFetchPokemonInformationsHandler()
 
         return () => { isMounted.current = false };
-    }, [getPokemonInformationsHandler])
+    }, [onFetchPokemonInformationsHandler])
 
     return (
-        <Container color={checkWichColorHandler || '#fff'}>
+        <Container color={colorShouldUser || '#fff'}>
             <Link to={`/pokemon/${pokemonInformations.id}`}>
                 <LeftSideContainer>
                     <IdPokemon>#{pokemonInformations.id}</IdPokemon>
@@ -83,10 +95,17 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemonUrl }) => {
                         }
                     </TypesContainer>
                 </LeftSideContainer>
-                <RightSideContainer>
+                <RightSideContainer loadingProp={loading}>
                     <PokeballSvg className="svg__pokeball" />
                 </RightSideContainer>
-                <PokemonImg className="img__pokemon" src={pokemonInformations.defaultImg} alt={pokemonInformations.name} loading="lazy" />
+                {
+                    !loading && <PokemonImg
+                        className="img__pokemon"
+                        src={pokemonInformations.defaultImg}
+                        alt={pokemonInformations.name}
+                        loading="lazy"
+                    />
+                }
             </Link>
         </Container>
     )

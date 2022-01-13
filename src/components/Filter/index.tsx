@@ -11,31 +11,29 @@ interface IFilterProps {
         placeholder: string;
         filterType: string;
     }[]
-    onActionFilter: (event: any, filterName: string) => void;
+    onActionFilter: (event: React.ChangeEvent<HTMLInputElement>, filterName: string) => void;
 }
 
-const Filter: React.FC<IFilterProps> = ({ filterConfig, onActionFilter }) => {
+const Filter: React.FC<IFilterProps> = ({ filterConfig, onActionFilter }) => (
+    <Container>
+        {
+            filterConfig.map((filter) => (
+                <FilterInputsContainer key={filter.filterName}>
+                    <SearchImgContainer>
+                        <GrSearch className="svg_search" />
+                    </SearchImgContainer>
+                    <Input
+                        type={filter.filterType}
+                        name={filter.filterName}
+                        placeHolder={filter.placeholder}
+                        onChange={(event) => onActionFilter(event, filter.filterName)}
 
-    return (
-        <Container>
-            {
-                filterConfig.map((item) => (
-                    <FilterInputsContainer key={item.filterName}>
-                        <SearchImgContainer>
-                            <GrSearch className="svg_search" />
-                        </SearchImgContainer>
-                        <Input
-                            type={item.filterType}
-                            name={item.filterName}
-                            placeHolder={item.placeholder}
-                            onChange={(e) => onActionFilter(e, item.filterName)}
+                    />
+                </FilterInputsContainer>
+            ))
+        }
+    </Container>
+)
 
-                        />
-                    </FilterInputsContainer>
-                ))
-            }
-        </Container>
-    )
-}
 
 export default Filter

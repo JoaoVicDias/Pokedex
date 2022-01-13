@@ -11,9 +11,9 @@ const Routes: React.FC = () =>
     <BrowserRouter>
         <Switch>
             <Route path="/" element={<Home />} />
-            <Route path="/pokemon/:pokemonId" element={<Pokemon/>} />
-            <Route path="/something-wrong" element={<ServerError/>}/>
-            <Route path="/not-found" element={<NotFound/>}/>
+            <Route path="/pokemon/:pokemonId" element={<Pokemon />} />
+            <Route path="/something-wrong" element={<ServerError />} />
+            <Route path="/not-found" element={<NotFound />} />
 
             <Route path="*" element={<Navigate replace to='/not-found' />} />
         </Switch>

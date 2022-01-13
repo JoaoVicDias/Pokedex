@@ -4,6 +4,10 @@ interface IContainer {
     color: string;
 }
 
+interface IPokeballSvg {
+    loadingProp: boolean;
+}
+
 export const Container = styled.li <IContainer>`
     background-color: ${props => props.color};
     box-shadow: rgb(0 0 0 / 30%) 1px 3px 12px 0px;
@@ -88,13 +92,14 @@ export const TypesContainer = styled.div`
     flex-wrap: wrap;
 `
 
-export const RightSideContainer = styled.div`
+export const RightSideContainer = styled.div<IPokeballSvg>`
     display: flex;
     align-items: center;
 
     .svg__pokeball {
         height: 114px;
         width: 114px;
+        animation: ${props => props.loadingProp ? 'rotatePokeball 1s infinite linear' : 'none'};
         
         @media(max-width: 1023px) {
             height: 80px;
@@ -108,6 +113,16 @@ export const RightSideContainer = styled.div`
 
         > path {
             fill: rgba(255, 255, 255, 0.2);
+        }
+    }
+
+    @keyframes rotatePokeball {
+        0% {
+            transform: rotateZ(0);
+        }
+
+        100% {
+            transform: rotateZ(360deg);
         }
     }
 `

@@ -11,17 +11,15 @@ interface IListPokemonsProps {
     }[];
 }
 
-const ListPokemons: React.FC<IListPokemonsProps> = ({ pokemons }) => {
+const ListPokemons: React.FC<IListPokemonsProps> = ({ pokemons }) => (
+    <Container>
+        {
+            pokemons.map((pokemon) => (
+                <PokemonCard key={pokemon.name} pokemonUrl={pokemon.url} />
+            ))
+        }
+    </Container>
+)
 
-    return (
-        <Container>
-            {  
-                pokemons.map((pokemon) => (
-                    <PokemonCard key={pokemon.name} pokemonUrl={pokemon.url} />
-                ))
-            }
-        </Container>
-    )
-}
 
 export default ListPokemons

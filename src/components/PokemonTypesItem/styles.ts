@@ -16,7 +16,7 @@ export const Container = styled.div <IContainer>`
         padding: 5px;
     }
 
-    > svg {
+    > img {
         width: 18px;
         height: 18px;
 
