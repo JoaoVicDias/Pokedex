@@ -101,7 +101,7 @@ const Home: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         filterTimeOut = setTimeout(() => {
             const filteredPokemons = Object.entries(filter).reduce((item, [key, value]) => {
-                return item.filter((pokemon: IPokemons | any) => pokemon[key].includes(value))
+                return item.filter((pokemon: IPokemons | any) => pokemon[key].trim().toLowerCase().includes(String(value).trim().toLowerCase()))
             }, data)
 
             setIsEmpty(!loading && filteredPokemons.length === 0)
